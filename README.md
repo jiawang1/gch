@@ -1,7 +1,7 @@
 ## gch
-man like grand cherokee
-
-![grand cherokee](http://www.jeep.com/assets/images/vehicles/2015/grand-cherokee/vlp/mod-hero/Jeep_2014_header.png)
+ ![grand cherokee](http://www.jeep.com/assets/images/vehicles/2015/grand-cherokee/vlp/mod-hero/Jeep_2014_header.png)
+ 
+ this is a small UI widget used to show stuff 360 degree by rotating pictures.
 
 ## example
 you can check example [here](https://rawgit.com/jiawang1/gch/master/example/index.html)

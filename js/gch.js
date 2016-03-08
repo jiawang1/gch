@@ -10,7 +10,7 @@
 					throw {"message": 'impiut param "imgs" should be array of image URL, current value is ' + imgs};
 				}
 
-				if(typeof root.nodeType === undefined){
+				if(typeof root.nodeType === "undefined"){
 					console.error && console.error('impiut param "root" should be DOM element');
 					throw {"message": 'impiut param "imgs" should be DOM element, current value is ' + root};
 				}
@@ -37,19 +37,22 @@
 				var con = document.createElement("div");
 				con.className = this.__conClass;
 				this.__root.appendChild(con);
+				var confr = document.createDocumentFragment();
 				this.__imgs.forEach(bind(function(imgURL, inx) {
 					var img = document.createElement("img");
 					img.className = "gch-img";
 					img.src = imgURL;
 					img.setAttribute("data-gch-id",inx);
-					this.__imgIDs.push(inx);
+					img.draggable = false;
+					this.__imgIDs.push(false);
+					img.onload = bind(function(e){this.__imgIDs[inx] = true;},this);
 					if (inx === this.__currentInx) {
 						img.style.visibility = "visible";
 					}
-					con.appendChild(img);
+					confr.appendChild(img);
 
 				}, this));
-				toArray(this.__root.getElementsByClassName('gch-img')).forEach(function(item){item.draggable = false;});
+				con.appendChild(confr);
 				this.__interval = Math.max(MIN_INTERVAL,Math.ceil(this.__ops.width/(this.__imgs.length*Math.max(1,this.__ops.speed))));
 				bindEventHandler(this.__root,"mousedown touchstart", bind(this.rotateStart,this));
 				bindEventHandler(this.__root,"mousemove touchmove", bind(this.rotating,this));
@@ -84,13 +87,13 @@
 						this.__currentPoz = pointerPosition;
 						var pre = this.__currentInx;
 						if((movement > 0 && this.__ops.clockWise)||(movement < 0 && !this.__ops.clockWise)){
-							this.__currentInx = this.__currentInx=== this.__imgIDs.length - 1? 0: ++this.__currentInx;
+							this.__currentInx = getNext(this.__currentInx, this.__imgIDs);
 						}else{
-							this.__currentInx = this.__currentInx=== 0?this.__imgIDs.length - 1: --this.__currentInx;
+							this.__currentInx = getLast(this.__currentInx, this.__imgIDs);
 						}
-						var pre = document.querySelector('[data-gch-id = "' + this.__imgIDs[pre]+ '"]');
+						var pre = document.querySelector('[data-gch-id = "' + pre+ '"]');
 						pre.style.visibility = "hidden";
-						document.querySelector('[data-gch-id = "' + this.__imgIDs[this.__currentInx]+'"]').style.visibility = "visible";
+						document.querySelector('[data-gch-id = "' + this.__currentInx+'"]').style.visibility = "visible";
 					}
 					e.preventDefault();
 					e.stopPropagation();
@@ -100,6 +103,17 @@
 			GrandCh.prototype.rotateEnd = function(e){
 				this.__isMoving = false;
 				
+			};
+
+			var getNext = function(id, aPool){
+				id = id=== aPool.length - 1? 0: ++id;
+				return aPool[id]?id:getNext(id, aPool);
+			}
+
+			var getLast = function(id, aPool){
+				id = id=== 0?aPool.length - 1: --id;
+				console.log(id + " " + aPool[id]);
+				return aPool[id]?id:getLast(id,aPool);
 			};
 
 			var bind = function(fuc, ob){

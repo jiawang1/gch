@@ -1,7 +1,7 @@
 ## gch
  ![grand cherokee](http://www.jeep.com/assets/images/vehicles/2015/grand-cherokee/vlp/mod-hero/Jeep_2014_header.png)
  
- this is a small UI widget used to show stuff 360 degree by rotating pictures.
+ this is a small UI widget used to show stuff 360 degree by rotating pictures. Basically support browser and mobile.
 
 ## example
 you can check example [here](https://rawgit.com/jiawang1/gch/master/example/index.html)
@@ -19,7 +19,7 @@ you can check example [here](https://rawgit.com/jiawang1/gch/master/example/inde
     var elements = document.getElementsByClassName("main");
     new GrandCh(elements[0],["./images/frame-1.jpg", "./images/frame-1.jpg",],{options});
 ```
-###patameters
+###parameters
 - **rootElement**: parent node for this widget
 - **imgs**: array of images URL
 - **options**: options currently supports four attributes:

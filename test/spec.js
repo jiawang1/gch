@@ -45,6 +45,17 @@ describe("grand ch test suite", function(){
 
 	});
 
-	
+	it("verify moving",function(){
+
+		// sinon.spy(grand, "rotating");
+		// var eMouseMove = document.createEvent("Event");
+		// eMouseMove.initEvent('mousemove', true, true);
+		// rootEle.dispatchEvent(eMouseMove);
+		// console.log("done");
+		// expect(grand.rotating.calledOnce).to.equal(true);
+
+	});
+
+
 
 });

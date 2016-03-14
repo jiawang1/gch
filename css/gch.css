@@ -7,11 +7,26 @@
 	cursor: url(./../images/rotate.png),grab;
 }
 
+.gch-img-container{
+	width: 100%;
+	height:100%;
+}
+
 .gch-img{
 	width: 100%;
 	height:100%;
 	position: absolute;
 	visibility: hidden;
+}
+
+.gch-show-cover{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 10000;
+	background-color: black;
+	opacity: 0.6;
+}
 
 
 .gch-img-show{

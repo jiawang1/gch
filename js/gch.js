@@ -17,7 +17,17 @@
 				if (!(this instanceof GrandCh)) {
 					return new GrandCh(root, imgs, options);
 				}
-				var _default = {initPosition: 0, clockWise: true, speed: 4};
+
+				/*  current configuration options:
+				 *		initPosition
+				 *		clockWise
+				 *		speed
+				 *		showLoadingCover
+				 *		width
+				 *		maxWaitingTime: if showLoadingCover is true, this value must provided, this is the max waiting millisecond for 
+				 *						image loading, after this time, cover will be removed
+				 */
+				var _default = {initPosition: 0, clockWise: true, speed: 4, showLoadingCover: true, maxWaitingTime: 5000};
 
 				this.__imgs = imgs; 
 				this.__ops = extend(_default, options); 
@@ -38,6 +48,20 @@
 				con.className = this.__conClass;
 				this.__root.appendChild(con);
 				var confr = document.createDocumentFragment();
+
+				if(this.__ops.showLoadingCover){
+					var cover = document.createElement("div");
+					cover.className = "gch-show-cover";
+					confr.appendChild(cover);
+
+					var timeHandler = setTimeout(function(){
+						cover.style.display ="none";
+					}, this.__ops.maxWaitingTime);
+				}
+
+				var imagContainer = document.createElement("div");
+				imagContainer.className = "gch-img-container";
+
 				this.__imgs.forEach(bind(function(imgURL, inx) {
 					var img = document.createElement("img");
 					img.className = "gch-img";
@@ -45,18 +69,35 @@
 					img.setAttribute("data-gch-id",inx);
 					img.draggable = false;
 					this.__imgIDs.push(false);
-					img.onload = bind(function(e){this.__imgIDs[inx] = true;},this);
+					img.onload = bind(function(e){
+						this.__imgIDs[inx] = true;
+						if(this.__ops.showLoadingCover){
+							var shouldRemove = true;
+							for(var i =0, j = this.__imgIDs.length; i < j; i++){
+								if(!this.__imgIDs[i]){
+									shouldRemove = false;
+									break;
+								}
+							}
+							shouldRemove && (function(){
+								cover.style.display ="none";
+								clearTimeout(timeHandler);
+							})();
+						}
+
+					},this);
 					if (inx === this.__currentInx) {
 						img.style.visibility = "visible";
 					}
-					confr.appendChild(img);
+					imagContainer.appendChild(img);
 
 				}, this));
+				confr.appendChild(imagContainer);
 				con.appendChild(confr);
 				this.__interval = Math.max(MIN_INTERVAL,Math.ceil(this.__ops.width/(this.__imgs.length*Math.max(1,this.__ops.speed))));
-				bindEventHandler(this.__root,"mousedown touchstart", bind(this.rotateStart,this));
-				bindEventHandler(this.__root,"mousemove touchmove", bind(this.rotating,this));
-				bindEventHandler(this.__root,"mouseup mouseleave touchend", bind(this.rotateEnd,this));
+				bindEventHandler(imagContainer,"mousedown touchstart", bind(this.rotateStart,this));
+				bindEventHandler(imagContainer,"mousemove touchmove", bind(this.rotating,this));
+				bindEventHandler(imagContainer,"mouseup mouseleave touchend", bind(this.rotateEnd,this));
 				this.__root = null;
 			};
 
@@ -112,7 +153,6 @@
 
 			var getLast = function(id, aPool){
 				id = id=== 0?aPool.length - 1: --id;
-				console.log(id + " " + aPool[id]);
 				return aPool[id]?id:getLast(id,aPool);
 			};
 

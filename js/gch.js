@@ -185,7 +185,7 @@
 					if(window.addEventListener){
 						ele.addEventListener(et, handler);
 					}else if(window.attachEvent){
-						ele.addEventListener("on" + et, handler);
+						ele.attachEvent("on" + et, handler);
 					}else{
 						ele["on" + et] = handler;
 					}

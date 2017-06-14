@@ -1,4 +1,4 @@
-(function(gloabl) {
+(function(global) {
 		"use strict";
 
 		var MIN_INTERVAL = 5;
@@ -192,6 +192,6 @@
 				});
 			};
 	
-	gloabl.GrandCh = GrandCh;
+	global.GrandCh = GrandCh;
 
 })(window);
